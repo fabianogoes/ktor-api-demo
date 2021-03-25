@@ -1,9 +1,10 @@
-package com.example.repository
+package com.example.infrastructure
 
-import com.example.models.Customer
+import com.example.application.port.CustomerPersistencePort
+import com.example.domain.Customer
 import java.util.*
 
-class CustomerRepository {
+class CustomerRepositoryTemporaryAdapter : CustomerPersistencePort {
 
     private val database = mutableListOf<Customer>()
 
@@ -14,25 +15,25 @@ class CustomerRepository {
     }
 
 
-    fun findAll() = database
+    override fun findAll() = database
 
-    fun findOne(id: String) = database.find { it.id == id }!!
+    override fun findOne(id: String) = database.find { it.id == id }!!
 
-    fun create(customer: Customer): Customer =
+    override fun create(customer: Customer): Customer =
         customer.copy(id = UUID.randomUUID().toString())
             .let {
                 database.add(it)
                 it
             }
 
-    fun update(id: String, customer: Customer): Customer {
+    override fun update(id: String, customer: Customer): Customer {
         val customerFound = database.find { it.id == id }!!
         val customerUpdated = customerFound.copy(name = customer.name)
         database[database.indexOf(customerFound)] = customerUpdated
         return customerUpdated
     }
 
-    fun delete(id: String) {
+    override fun delete(id: String) {
         database.remove(database.find { it.id == id })
     }
 }

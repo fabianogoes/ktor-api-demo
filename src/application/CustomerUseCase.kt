@@ -1,9 +1,9 @@
-package com.example.services
+package com.example.application
 
-import com.example.models.Customer
-import com.example.repository.CustomerRepository
+import com.example.application.port.CustomerPersistencePort
+import com.example.domain.Customer
 
-interface CustomerService {
+interface CustomerUseCase {
 
     fun findAll(): List<Customer>
     fun findOne(id: String): Customer
@@ -13,7 +13,7 @@ interface CustomerService {
 
 }
 
-class CustomerServiceImpl(private val repository: CustomerRepository) : CustomerService {
+class CustomerUseCaseImpl(private val repository: CustomerPersistencePort) : CustomerUseCase {
 
     override fun findAll(): List<Customer> = repository.findAll()
 

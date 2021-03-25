@@ -1,7 +1,7 @@
 package com.example.routes
 
-import com.example.models.Customer
-import com.example.services.CustomerService
+import com.example.application.CustomerUseCase
+import com.example.domain.Customer
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
@@ -11,33 +11,33 @@ import org.koin.ktor.ext.inject
 
 fun Routing.customerRouting() {
 
-    val service: CustomerService by inject()
+    val useCase: CustomerUseCase by inject()
 
     route("/customers") {
 
         get {
-            call.respond(service.findAll())
+            call.respond(useCase.findAll())
         }
 
         get("/{id}") {
             val id: String = call.parameters["id"].toString()
-            call.respond(service.findOne(id))
+            call.respond(useCase.findOne(id))
         }
 
         post {
             val customer = call.receive<Customer>()
-            call.respond(HttpStatusCode.Created, service.create(customer))
+            call.respond(HttpStatusCode.Created, useCase.create(customer))
         }
 
         put("/{id}") {
             val id = call.parameters["id"].toString()
             val customer = call.receive<Customer>()
-            call.respond(service.update(id, customer))
+            call.respond(useCase.update(id, customer))
         }
 
         delete("/{id}") {
             val id = call.parameters["id"].toString()
-            service.delete(id)
+            useCase.delete(id)
             call.respond(HttpStatusCode.NoContent)
         }
 

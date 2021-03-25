@@ -1,4 +1,4 @@
-package com.example.models
+package com.example.domain
 
 data class Customer(
     var id: String? = null,

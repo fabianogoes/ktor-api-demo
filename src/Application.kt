@@ -1,9 +1,10 @@
 package com.example
 
-import com.example.repository.CustomerRepository
+import com.example.application.CustomerUseCase
+import com.example.application.CustomerUseCaseImpl
+import com.example.application.port.CustomerPersistencePort
+import com.example.infrastructure.CustomerRepositoryTemporaryAdapter
 import com.example.routes.customerRouting
-import com.example.services.CustomerService
-import com.example.services.CustomerServiceImpl
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.gson.*
@@ -19,8 +20,8 @@ import org.koin.dsl.module
 //fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 fun main(args: Array<String>) {
     val koinModule = module {
-        single<CustomerService> { CustomerServiceImpl(get()) }
-        single { CustomerRepository() }
+        single<CustomerUseCase> { CustomerUseCaseImpl(get()) }
+        single<CustomerPersistencePort> { CustomerRepositoryTemporaryAdapter() }
     }
 
     startKoin{
